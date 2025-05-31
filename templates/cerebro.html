@@ -27,11 +27,22 @@
   </footer>
 
   <script>
-    function enviarMensaje() {
-      const input = document.getElementById('inputChat');
-      alert("Enviando: " + input.value);
-      input.value = "";
-    }
+  async function enviarMensaje() {
+    const input = document.getElementById('inputChat');
+    const mensaje = input.value.trim();
+    if (!mensaje) return;
+
+    // Llamada a la API Flask
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({mensaje})
+    });
+
+    const data = await response.json();
+    alert("LuisGPT dice: " + data.respuesta);
+    input.value = "";
+  }
   </script>
 </body>
 </html>
