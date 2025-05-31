@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cerebro Digital LuisGPT</title>
+</head>
+<body>
+  <h1>Cerebro Digital de Luis</h1>
+
+  <h2>Perfil de Luis</h2>
+  <pre id="perfil">Cargando perfil...</pre>
+
+  <h2>Servicios</h2>
+  <ul id="servicios"></ul>
+
+  <h2>Chat con LuisGPT</h2>
+  <input type="text" id="mensaje" placeholder="Escribe algo..." />
+  <button onclick="enviarMensaje()">Enviar</button>
+  <p id="respuesta"></p>
+
+  <script>
+    async function cargarPerfil() {
+      const res = await fetch('http://127.0.0.1:5000/api/perfil');
+      const data = await res.json();
+      document.getElementById('perfil').textContent = JSON.stringify(data.perfil, null, 2);
+    }
+
+    async function cargarServicios() {
+      const res = await fetch('http://127.0.0.1:5000/api/servicios');
+      const data = await res.json();
+      const ul = document.getElementById('servicios');
+      ul.innerHTML = '';
+      data.servicios.forEach(servicio => {
+        const li = document.createElement('li');
+        li.textContent = servicio;
+        ul.appendChild(li);
+      });
+    }
+
+    async function enviarMensaje() {
+      const mensaje = document.getElementById('mensaje').value;
+      const res = await fetch('http://127.0.0.1:5000/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mensaje })
+      });
+      const data = await res.json();
+      document.getElementById('respuesta').textContent = data.respuesta;
+    }
+
+    cargarPerfil();
+    cargarServicios();
+  </script>
+</body>
+</html>
