@@ -2,54 +2,36 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Cerebro Digital LuisGPT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cerebro Digital de Luis</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <h1>Cerebro Digital de Luis</h1>
+  <header>
+    Cerebro Digital de Luis
+  </header>
 
-  <h2>Perfil de Luis</h2>
-  <pre id="perfil">Cargando perfil...</pre>
+  <section>
+    <h2>Perfil de Luis</h2>
+    <p>Cargando perfil...</p>
 
-  <h2>Servicios</h2>
-  <ul id="servicios"></ul>
+    <h2>Servicios</h2>
+    <p>Chat con LuisGPT</p>
 
-  <h2>Chat con LuisGPT</h2>
-  <input type="text" id="mensaje" placeholder="Escribe algo..." />
-  <button onclick="enviarMensaje()">Enviar</button>
-  <p id="respuesta"></p>
+    <input type="text" placeholder="Escribe algo..." id="inputChat" />
+    <button onclick="enviarMensaje()">Enviar</button>
+  </section>
+
+  <footer>
+    &copy; 2025 Luis Alfredo Campo Torres
+  </footer>
 
   <script>
-    async function cargarPerfil() {
-      const res = await fetch('http://127.0.0.1:5000/api/perfil');
-      const data = await res.json();
-      document.getElementById('perfil').textContent = JSON.stringify(data.perfil, null, 2);
+    function enviarMensaje() {
+      const input = document.getElementById('inputChat');
+      alert("Enviando: " + input.value);
+      input.value = "";
     }
-
-    async function cargarServicios() {
-      const res = await fetch('http://127.0.0.1:5000/api/servicios');
-      const data = await res.json();
-      const ul = document.getElementById('servicios');
-      ul.innerHTML = '';
-      data.servicios.forEach(servicio => {
-        const li = document.createElement('li');
-        li.textContent = servicio;
-        ul.appendChild(li);
-      });
-    }
-
-    async function enviarMensaje() {
-      const mensaje = document.getElementById('mensaje').value;
-      const res = await fetch('http://127.0.0.1:5000/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mensaje })
-      });
-      const data = await res.json();
-      document.getElementById('respuesta').textContent = data.respuesta;
-    }
-
-    cargarPerfil();
-    cargarServicios();
   </script>
 </body>
 </html>
