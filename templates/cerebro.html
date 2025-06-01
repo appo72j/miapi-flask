@@ -1,72 +1,27 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cerebro Digital de Luis</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <title>LuisGPT</title>
+  <script>
+    async function enviarMensaje() {
+      const input = document.getElementById("inputChat");
+      const respuesta = await fetch("/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "mensaje=" + encodeURIComponent(input.value)
+      });
+      const texto = await respuesta.text();
+      document.getElementById("respuesta").innerText = texto;
+    }
+  </script>
 </head>
 <body>
-  <header>
-    Cerebro Digital de Luis
-  </header>
-
-  <section>
-    <h2>Perfil de Luis</h2>
-    <p>Cargando perfil...</p>
-
-    <h2>Servicios</h2>
-    <p>Chat con LuisGPT</p>
-  
-  <div id="chatBox" style="border:1px solid #ccc; height:200px; overflow-y:auto; padding:10px; margin-bottom: 1rem; background:#f9f9f9; border-radius: 5px;">
-  <!-- Aquí aparecerán los mensajes -->
-  </div>
-
-    <input type="text" placeholder="Escribe algo..." id="inputChat" />
-    <button onclick="enviarMensaje()">Enviar</button>
-  </section>
-
-  <footer>
-    &copy; 2025 Luis Alfredo Campo Torres
-  </footer>
-
-  <script>
-  async function enviarMensaje() {
-    const input = document.getElementById('inputChat');
-    const chatBox = document.getElementById('chatBox');
-    const mensaje = input.value.trim();
-    if (!mensaje) return;
-
-    // Mostrar el mensaje del usuario
-    const userMsg = document.createElement('div');
-    userMsg.style.textAlign = 'right';
-    userMsg.style.margin = '5px';
-    userMsg.textContent = 'Tú: ' + mensaje;
-    chatBox.appendChild(userMsg);
-
-    // Limpiar input
-    input.value = "";
-
-    // Llamada a la API Flask
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({mensaje})
-    });
-
-    const data = await response.json();
-
-    // Mostrar la respuesta de LuisGPT
-    const botMsg = document.createElement('div');
-    botMsg.style.textAlign = 'left';
-    botMsg.style.margin = '5px';
-    botMsg.style.fontWeight = 'bold';
-    botMsg.textContent = 'LuisGPT: ' + data.respuesta;
-    chatBox.appendChild(botMsg);
-
-    // Auto scroll para ver el último mensaje
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-  </script>
+  <h2>Habla con LuisGPT</h2>
+  <input type="text" id="inputChat" placeholder="Escribe algo...">
+  <button onclick="enviarMensaje()">Enviar</button>
+  <p id="respuesta" style="margin-top: 1em;"></p>
 </body>
 </html>
