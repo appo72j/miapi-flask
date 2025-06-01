@@ -4,6 +4,7 @@ import os
 
 app = Flask(__name__)
 
+# La API key se tomará desde Render
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route('/')
@@ -19,7 +20,7 @@ def chat():
         messages=[
             {
                 "role": "system",
-                "content": "Eres un asistente llamado LuisGPT que responde de manera amable y clara."
+                "content": "Eres un asistente llamado LuisGPT que responde como un experto en tecnología, amable y directo."
             },
             {
                 "role": "user",
